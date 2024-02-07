@@ -14,6 +14,20 @@ const AcceptTopups = Loadable(lazy(() => import('../views/dashboards/AcceptTopup
 const UserProfile = Loadable(lazy(() => import('../components/dashboard/minimalDashboard/UserProfile')));
 const AdminProfile = Loadable(lazy(() => import('../components/dashboard/minimalDashboard/AdminProfile')));
 
+//withdraw pending
+const CapitalWithdrawPending = Loadable(lazy(() => import('../views/dashboards/CapitalWithdrawPending')));
+const WalletWithdrawPending = Loadable(lazy(() => import('../views/dashboards/WalletWithdrawPending')));
+
+
+//Reports
+
+const AddFundHistory = Loadable(lazy(() => import('../views/dashboards/AddFundHistory')));
+const CapitalWithdrawHistory = Loadable(lazy(() => import('../views/dashboards/CapitalWithdrawHistory')));
+const WalletWithdrawHistory = Loadable(lazy(() => import('../views/dashboards/WalletWithdrawHistory')));
+
+
+
+
 
 
 
@@ -129,7 +143,7 @@ const ThemeRoutes = [
     path: '/',
     element: <FullLayout />,
     children: [
-      { path: '/', name: 'Home', element: <Navigate to="/dashboards/minimal" /> },
+      { path: '/', name: 'Home', element: <LoginFormik /> },
       { path: '/dashboards/minimal', name: 'Minimal', exact: true, element: <Minimal /> },
 
 
@@ -142,8 +156,18 @@ const ThemeRoutes = [
       {path: '/users-tree-list/:userId', name: 'ViewUserTree',exact: true, element: <ViewUserTree />},
       { path: '/roi-split', name: 'ROISplit', exact: true, element: <ROISplit /> },
       { path: '/accept-topups', name: 'AcceptTopups', exact: true, element: <AcceptTopups /> },
-      { path: '/user-profile', name: 'UserProfile', exact: true, element: <UserProfile /> },
+      { path: '/user-profile/:userId', name: 'UserProfile', exact: true, element: <UserProfile /> },
       { path: '/admin-profile', name: 'AdminProfile', exact: true, element: <AdminProfile /> },
+
+      //withdrawal pending
+      { path: '/capital-withdraw-pending', name: 'CapitalWithdrawPending', exact: true, element: <CapitalWithdrawPending /> },
+      { path: '/wallet-withdraw-pending', name: 'WalletWithdrawPending', exact: true, element: <WalletWithdrawPending /> },
+
+      //reports
+      { path: '/addFund-History', name: 'AddFundHistory', exact: true, element: <AddFundHistory /> },
+      { path: '/capital-withdraw-histroy', name: 'CapitalWithdrawHistory', exact: true, element: <CapitalWithdrawHistory /> },
+      { path: '/wallet-withdraw-history', name: 'WalletWithdrawHistory', exact: true, element: <WalletWithdrawHistory /> },
+
 
 
 

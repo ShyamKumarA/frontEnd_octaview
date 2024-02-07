@@ -1,9 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { ReactComponent as LogoDarkIcon } from '../../assets/images/logos/elite-dark-icon.svg';
 import LogoDarkText from '../../assets/images/logos/logo-text.png';
-import { ReactComponent as LogoWhiteIcon } from '../../assets/images/logos/elite-white-icon.svg';
 import LogoWhiteText  from '../../assets/images/logos/logo-light-text.png';
 
 const Logo = () => {
@@ -14,13 +12,11 @@ const Logo = () => {
     <Link to="/" className="d-flex align-items-center gap-2">
       {isDarkMode || activeSidebarBg !== 'white' ? (
         <>
-          <LogoWhiteIcon />
           {toggleMiniSidebar ? '' : <img src={LogoWhiteText} className="d-none d-lg-block" alt='logo-text' />}
         </>
       ) : (
         <>
-          <LogoDarkIcon />
-          {toggleMiniSidebar ? '' : <img src={LogoDarkText} className="d-none d-lg-block" alt='logo-text' />}
+          {toggleMiniSidebar ? '' : <img src={LogoDarkText} style={{ width: '190px', height: 'auto' }} className="d-none d-lg-block" alt='logo-text' />}
         </>
       )}
     </Link>

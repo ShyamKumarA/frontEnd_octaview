@@ -16,7 +16,7 @@ export const packageManage = createAsyncThunk('packageManage', async() => {
   };
 
   const response = await axios.get(`${URL}/api/admin/view-addPackageFund-pending`, config);
-
+console.log(response);
   return response.data;
 })
 
@@ -108,7 +108,7 @@ export const Rejectpackage = createAsyncThunk('Rejectpackage', async(id) => {
       "content-type": "application/json",
     },
   };
-  const response = await axios.post(`${URL}api/admin/user-package-rejected/${id}`, {},config);
+  const response = await axios.post(`${URL}/api/admin/user-package-rejected/${id}`, {},config);
 
   console.log(response);
   return response.data;
@@ -154,7 +154,7 @@ export const topupManage = createAsyncThunk('topupManage', async() => {
   };
 
   const response = await axios.get(`${URL}/api/admin/view-addFund-pending`, config);
-
+console.log(response);
   return response.data;
 })
 
@@ -230,58 +230,10 @@ export const acceptTopupSlice = createSlice({
   },
 });
 
-// export const RejectTopups = createAsyncThunk('RejectTopups', async(id) => {
-  
-//   const userData = localStorage.getItem("userInfo");
-//   const parsedUserData = JSON.parse(userData);
-//   const token = parsedUserData.access_token;
-
-//   const config = {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       "content-type": "application/json",
-//     },
-//   };
-  
-//   const response = await axios.post(`${URL}/api/admin/approve-addFund/${id}`, {},config);
-
-//   console.log(response);
-//   return response.data;
-
-// })
-
-// export const rejectTopupSlice = createSlice({
-//   name: 'rejectTopupSlice',
-//   initialState:{
-//     loading: false,
-//     data: null,
-//     error: false,
-//   },
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder.addCase(RejectTopups.pending, (state) => {
-//       state.loading = true;
-//       state.data = null;
-//       state.error = false;
-//     });
-//     builder.addCase(RejectTopups.fulfilled, (state, action) => {
-//       state.loading = false;
-//       state.data = action.payload;
-//       state.error = false;
-//     });
-//     builder.addCase(RejectTopups.rejected, (state, action) => {
-//       console.log("Error", action.payload);
-//       state.error = true;
-//     });
-//   },
-// });
-
-
 export const acceptPackageReducer = acceptPackageSlice.reducer;
 export const rejectPackageReducer = rejectPackageSlice.reducer;
 export const packageManageReducer = packageManageSlice.reducer;
 export const acceptTopupReducer = acceptTopupSlice.reducer;
 export const topupManageReducer = topupManageSlice.reducer;
-// export const rejectTopupReducer = rejectTopupSlice.reducer;
 
 

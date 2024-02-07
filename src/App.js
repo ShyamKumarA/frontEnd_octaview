@@ -3,6 +3,8 @@
 import React, { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Themeroutes from './routes/Router';
 import ThemeSelector from './layouts/theme/ThemeSelector';
 import Loader from './layouts/loader/Loader';
@@ -18,6 +20,7 @@ const App = () => {
         dir={direction ? 'rtl' : 'ltr'}
       >
         <ThemeSelector />
+        <ToastContainer/>
         {routing}
       </div>
     </Suspense>

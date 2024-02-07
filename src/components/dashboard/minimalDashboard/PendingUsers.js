@@ -3,13 +3,15 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, CardTitle, Input, Table, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import ModalImage from 'react-modal-image';
-import { AcceptUserManage, userManage } from '../../../store/userSlice';
+import { AcceptUserManage,RejectUserManage, userManage } from '../../../store/userSlice';
 
 const PendingUsers = () => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.userManageReducer);
   const { data: acceptData } = useSelector((state) => state.AcceptUserManageReducer);
+  const { data: rejectData } = useSelector((state) => state.RejectUserManageReducer);
 
+  console.log(rejectData);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -21,6 +23,9 @@ const PendingUsers = () => {
   const acceptHandler = (id) => {
     setSelectedUserId(id);
     setShowConfirmationModal(true);
+  };
+  const rejectHandler = (id) => {
+    dispatch(RejectUserManage(id));
   };
 
   const handleCloseConfirmationModal = () => {
@@ -43,7 +48,7 @@ const PendingUsers = () => {
       <CardBody>
         <div className="d-flex align-items-center justify-content-between">
           <div>
-            <CardTitle tag="h4">Sales Overview</CardTitle>
+            <CardTitle tag="h4">Pending Users</CardTitle>
           </div>
           <div className="mt-4 mt-md-0">
             <Input type="select" className="custom-select">
@@ -56,13 +61,7 @@ const PendingUsers = () => {
         </div>
       </CardBody>
       <CardBody className="bg-light d-flex align-items-center justify-content-between">
-        <div>
-          <h3>March 2022</h3>
-          <h5 className="fw-light mb-0 text-muted">Report for this month</h5>
-        </div>
-        <div className="mt-4 mt-md-0">
-          <h2 className="text-success mb-0">$3,690</h2>
-        </div>
+       
       </CardBody>
       <div className="table-responsive">
         <Table className="text-nowrap align-middle mb-0" hover>
@@ -90,11 +89,13 @@ const PendingUsers = () => {
                 <td
                       className="mb-0"
                     >
+                      
                       { tdata && (
                         <div style={{ width: "80px" }}>
                           <ModalImage
-                            small={`https://sevensquaregroup.in/uploads/${tdata.aadhaar}`}
-                            large={`https://sevensquaregroup.in/uploads/${tdata.aadhaar}`}
+                          
+                          small={`http://localhost:4001/uploads/${tdata.aadhaar}`}
+                          large={`http://localhost:4001/uploads/${tdata.aadhaar}`}
                             alt="screenshot"
                           />
                         </div>
@@ -105,7 +106,7 @@ const PendingUsers = () => {
                 
                 Accept
               </Button>
-              <Button className="btn" color="danger">
+              <Button className="btn" color="danger" onClick={() => rejectHandler(tdata._id)}>
                 Reject
               </Button>
                 </td>

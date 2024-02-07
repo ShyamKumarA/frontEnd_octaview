@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody, Input } from 'reactstrap';
+import { Button, Label, FormGroup, Container, Row, Col, Card, CardBody } from 'reactstrap';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify'; // Import toast from react-toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import the styles
+
 import AuthLogo from "../../layouts/logo/AuthLogo";
 import { ReactComponent as LeftBg } from '../../assets/images/bg/login-bgleft.svg';
 import { ReactComponent as RightBg } from '../../assets/images/bg/login-bg-right.svg';
@@ -13,8 +16,8 @@ const LoginFormik = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
-  const { userInfo } = useSelector((state) => state.userLoginReducer);
-
+  const { userInfo, error } = useSelector((state) => state.userLoginReducer);
+console.log(error);
   const initialValues = {
     email: '',
     password: '',
@@ -28,9 +31,15 @@ const LoginFormik = () => {
   });
 
   useEffect(() => {
-    if(userInfo) navigate('/')
-  }, [userInfo])
+    if (userInfo) {
+      navigate('/dashboards/minimal');
+    } else if (error) {
+      console.log("looi");
+      toast.error('Login failed. Please check your credentials.');
+    }
+  }, [userInfo, error, navigate]);
   
+
 
   return (
     <div className="loginBox">
@@ -42,9 +51,11 @@ const LoginFormik = () => {
             <AuthLogo />
             <Card>
               <CardBody className="p-4 m-1">
-                <h5 className="mb-0">Login</h5>
+              <h5 className="mb-0 text-xl-center " style={{ color: "golden", fontWeight: "bold" }}>Login</h5>
+
+
                 <small className="pb-4 d-block">
-                  Do not have an account? <Link to="/auth/registerformik">Sign Up</Link>
+                  {/* Do not have an account? <Link to="/auth/registerformik">Sign Up</Link> */}
                 </small>
                 <Formik
                   initialValues={initialValues}
@@ -86,12 +97,12 @@ const LoginFormik = () => {
                         />
                       </FormGroup>
                       <FormGroup className="form-check d-flex" inline>
-                        <Label check>
-                          <Input type="checkbox" />
-                          Remember me
-                        </Label>
+                        {/* <Label check> */}
+                          {/* <Input type="checkbox" /> */}
+                          {/* Remember me */}
+                        {/* </Label> */}
                         <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
-                          <small>Forgot Pwd?</small>
+                          {/* <small>Forgot Pwd?</small> */}
                         </Link>
                       </FormGroup>
                       <FormGroup>

@@ -42,12 +42,18 @@ const PendingPackages = () => {
     setShowConfirmationPopup(false);
   };
 
+  const formatDate = (timestamp) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+    const formattedDate = new Date(timestamp).toLocaleDateString('en-US', options);
+    return formattedDate;
+  };
+
   return (
     <Card>
       <CardBody>
         <div className="d-flex align-items-center justify-content-between">
           <div>
-            <CardTitle tag="h4">Sales Overview</CardTitle>
+            <CardTitle tag="h4">Pending Packages</CardTitle>
           </div>
           <div className="mt-4 mt-md-0">
             <Input type="select" className="custom-select">
@@ -60,13 +66,7 @@ const PendingPackages = () => {
         </div>
       </CardBody>
       <CardBody className="bg-light d-flex align-items-center justify-content-between">
-        <div>
-          <h3>March 2022</h3>
-          <h5 className="fw-light mb-0 text-muted">Report for this month</h5>
-        </div>
-        <div className="mt-4 mt-md-0">
-          <h2 className="text-success mb-0">$3,690</h2>
-        </div>
+        
       </CardBody>
       <div className="table-responsive">
         <Table className="text-nowrap align-middle mb-0" hover>
@@ -74,7 +74,10 @@ const PendingPackages = () => {
             <tr>
               <th>#</th>
               <th>Name</th>
+              <th>Phone</th>
               <th>Date</th>
+              <th>Tnx ID</th>
+              <th>walletUrl</th>
               <th>Amount</th>
               <th>Action</th>
             </tr>
@@ -89,6 +92,11 @@ const PendingPackages = () => {
                   <h6 className="mb-0">{tdata.username}</h6>
                 </td>
                 <td>{tdata.phone}</td>
+                <td>
+                  <h6 className="mb-0">{formatDate(tdata.createdAt)}</h6>
+                </td>
+                <td>{tdata.transactionCode}</td>
+                <td>{tdata.addFundUrl}</td>
                 <td>{tdata.topUpAmount}</td>
                 <td>
                   <Button className="btn m-2" onClick={() => acceptHandler(tdata._id)} color="success">

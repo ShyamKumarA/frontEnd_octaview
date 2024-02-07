@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkmain_bt5=self.webpackChunkmain_bt5||[]).push([[8585],{18585:function(e,s,n){n.r(s);n(72791);var a=n(25211),c=n(80184);s.default=function(){return(0,c.jsx)(c.Fragment,{children:(0,c.jsx)(a.Zb,{children:(0,c.jsx)(a.eW,{className:"p-4",children:(0,c.jsx)("p",{className:"mb-0",children:"This is some text within a card block."})})})})}}}]);
+//# sourceMappingURL=8585.f32f86a2.chunk.js.map

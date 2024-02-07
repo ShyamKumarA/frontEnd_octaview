@@ -1,36 +1,37 @@
 /* eslint-disable no-underscore-dangle */
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardTitle, Input, Table } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Input, Modal, ModalHeader, Table } from 'reactstrap';
 import { userListManage } from '../../../store/userSlice';
+import AddUser from './AddUser';
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.userListManageReducer);
-  
+  const { data } = useSelector(state => state.userListManageReducer);
   const [selectedChild, setSelectedChild] = useState('child1');
+  const [modal, setModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     dispatch(userListManage());
   }, [dispatch]);
 
-
   const getChildData = () => {
-    if (!data) return []; // Add a null check for data
-    switch (selectedChild) {
-      case 'child1':
-        return data.child1 || [];
-      case 'child2':
-        return data.child2 || [];
-      case 'child3':
-        return data.child3 || [];
-      default:
-        return [];
-    }
+    if (!data) return [];
+    return data[selectedChild] || [];
   };
 
-  
+  const toggle = () => {
+    setModal(!modal);
+  };
+
+  const filteredData = getChildData().filter(row =>
+    Object.values(row).some(value =>
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   return (
     <Card>
       <CardBody>
@@ -39,28 +40,33 @@ const UserList = () => {
             <CardTitle tag="h4">Users Overview</CardTitle>
           </div>
           <div className="mt-4 mt-md-0">
-        <Input
-          type="select"
-          className="custom-select"
-          value={selectedChild}
-          onChange={(e) => setSelectedChild(e.target.value)}
-        >
-          <option value="child1">Child 1</option>
-          <option value="child2">Child 2</option>
-          <option value="child3">Child 3</option>
-        </Input>
-      </div>
-
+            <Input
+              type="select"
+              className="custom-select"
+              value={selectedChild}
+              onChange={e => setSelectedChild(e.target.value)}
+            >
+              <option value="child1">Level 1</option>
+              <option value="child2">Level 2</option>
+              <option value="child3">Level 3</option>
+            </Input>
+          </div>
         </div>
       </CardBody>
       <CardBody className="bg-light d-flex align-items-center justify-content-between">
-        <div>
-          <h3>March 2022</h3>
-          <h5 className="fw-light mb-0 text-muted">Report for this month</h5>
-        </div>
         <div className="mt-4 mt-md-0">
-          <h2 className="text-success mb-0">$3,690</h2>
+          <div className="p-3 border-bottom">
+            <Button color="danger" block onClick={toggle}>
+              Add New
+            </Button>
+          </div>
         </div>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+        />
       </CardBody>
       <div className="table-responsive">
         <Table className="text-nowrap align-middle mb-0" hover>
@@ -70,16 +76,16 @@ const UserList = () => {
               <th>Name</th>
               <th>Package</th>
               <th>Mobile</th>
-              <th>Sponser</th>
+              <th>Sponsor</th>
               <th>Action</th>
               <th>Details</th>
             </tr>
           </thead>
           <tbody>
-        {data && getChildData().map((tdata, index) => (
-          <tr key={tdata._id} className="border-top">
+            {filteredData.map((tdata, index) => (
+              <tr key={tdata._id} className="border-top">
                 <td>
-                  <h6 className="mb-0">{index+1}</h6>
+                  <h6 className="mb-0">{index + 1}</h6>
                 </td>
                 <td>
                   <h6 className="mb-0">{tdata.username}</h6>
@@ -89,30 +95,34 @@ const UserList = () => {
                 <td><h6 className="mb-0">{tdata.ownSponserId}</h6></td>
 
                 <td>
-                <Link
-                                to={`/users-tree-list/${tdata._id}`}
-                                className="hidden xs:block ml-2"
-                              >
-                <Button className="btn"  color="success">
-                View Tree
-              </Button>
-              </Link>
-              </td>
-              <td>
-              <Link
-                                to={`/user-details/${tdata._id}`}
-                                className="hidden xs:block ml-2"
-                              >
-              <Button className="btn "  color="info">
-                View Details
-              </Button>
-              </Link>
+                  <Link
+                    to={`/users-tree-list/${tdata._id}`}
+                    className="hidden xs:block ml-2"
+                  >
+                    <Button className="btn" color="success">
+                      View Tree
+                    </Button>
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/user-profile/${tdata._id}`}
+                    className="hidden xs:block ml-2"
+                  >
+                    <Button className="btn" color="info">
+                      View Details
+                    </Button>
+                  </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
       </div>
+      <Modal isOpen={modal} toggle={toggle} size="md">
+        <ModalHeader toggle={toggle}>Add Contact</ModalHeader>
+        <AddUser click={toggle} />
+      </Modal>
     </Card>
   );
 };

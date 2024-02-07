@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import Iframe from 'react-iframe';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Row,
   Col,
   Card,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
+ 
   Button,
   TabContent,
   TabPane,
@@ -19,12 +18,39 @@ import {
   Label,
   Input,
 } from 'reactstrap';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {  userProfileManage,editProfileManage } from '../../../store/profileSlice';
 
 
-import img1 from '../../../assets/images/users/user1.jpg';
+
+
+
+
+// import img1 from '../../../assets/images/users/user1.jpg';
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState('2');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    address: '',
+    password: '',
+    txnPassword: '',
+    phone: '',
+    country: 'India',
+  });
+
+  const {userId} = useParams();
+const dispatch=useDispatch();
+const { data } = useSelector((state) => state.userProfileManageReducer);
+console.log(data);
+
+useEffect(() => {
+  dispatch(userProfileManage(userId));
+}, [dispatch,userId])
+
+
 
   const toggle = (tab) => {
     if (activeTab !== tab) {
@@ -32,11 +58,39 @@ const UserProfile = () => {
     }
   };
 
+  const acceptHandler = async (id) => {
+    try {
+      await dispatch(editProfileManage({ id, formData }));
+      // Reset form values
+      setFormData({
+        name: '',
+        email: '',
+        address: '',
+        password: '',
+        txnPassword: '',
+        phone: '',
+        country: 'India',
+      });
+
+      // Show success toast
+      toast.success('User profile updated successfully.');
+
+    } catch (error) {
+      // Show error toast
+      toast.error('Failed to update user profile. Please try again.');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   return (
     <>
       
       <Row>
-        <Col xs="12" md="12" lg="4">
+        {/* <Col xs="12" md="12" lg="4">
           <Card>
             <CardBody className="p-4">
               <div className="text-center mt-4">
@@ -96,8 +150,8 @@ const UserProfile = () => {
               </div>
             </CardBody>
           </Card>
-        </Col>
-        <Col xs="12" md="12" lg="8">
+        </Col> */}
+        <Col xs="12" md="12" lg="12">
           <Card>
             <Nav tabs>
               {/* <NavItem>
@@ -132,7 +186,7 @@ const UserProfile = () => {
               </NavItem>
             </Nav>
             <TabContent activeTab={activeTab}>
-              <TabPane tabId="2">
+            <TabPane tabId="2">
                 <Row>
                   <Col sm="12">
                     <div className="p-4">
@@ -140,42 +194,49 @@ const UserProfile = () => {
                         <Col md="3" xs="6" className="border-end">
                           <strong>Full Name</strong>
                           <br />
-                          <p className="text-muted">Johnathan Deo</p>
+                          <p className="text-muted">{data && data.name}</p>
                         </Col>
                         <Col md="3" xs="6" className="border-end">
                           <strong>Mobile</strong>
                           <br />
-                          <p className="text-muted">(123) 456 7890</p>
+                          <p className="text-muted">{data && data.phone}</p>
                         </Col>
                         <Col md="3" xs="6" className="border-end">
                           <strong>Email</strong>
                           <br />
-                          <p className="text-muted">johnathan@admin.com</p>
+                          <p className="text-muted">{data && data.email}</p>
                         </Col>
                         <Col md="3" xs="6" className="border-end">
                           <strong>Location</strong>
                           <br />
-                          <p className="text-muted">London</p>
+                          <p className="text-muted">India</p>
                         </Col>
                       </Row>
-                      <h4 className="font-medium mt-4">Skill Set</h4>
+                      <h4 className="font-medium mt-4"><strong> Detailed view</strong></h4> 
                       <hr />
                       <h5 className="mt-4">
-                        Wordpress <span className="float-end">80%</span>
+                      Wallet Amount <span className="float-end">{data && data.totalIncome}</span>
                       </h5>
-                      
+                      <hr />
                       <h5 className="mt-4">
-                        HTML 5 <span className="float-end">90%</span>
+                      DailyBonus <span className="float-end">{data && data.dailyBonus}</span>
                       </h5>
-                      <Progress color="success" value="25" />
+                      <hr />
                       <h5 className="mt-4">
-                        jQuery <span className="float-end">50%</span>
+                      LevelRoi <span className="float-end">{data && data.levelRoi}</span>
                       </h5>
-                      <Progress color="info" value={50} />
+                      <hr />
                       <h5 className="mt-4">
-                        Photoshop <span className="float-end">70%</span>
+                      capitalAmount <span className="float-end">{data && data.capitalAmount}</span>
                       </h5>
-                      <Progress color="warning" value={75} />
+                      <hr />
+
+                      <h5 className="mt-4">
+                       Direct Income <span className="float-end">{data && data.directIncome}</span>
+                      </h5>
+                      <hr />
+
+                      <Progress color="warning" value={100} />
                     </div>
                   </Col>
                 </Row>
@@ -184,37 +245,41 @@ const UserProfile = () => {
                 <Row>
                   <Col sm="12">
                     <div className="p-4">
-                      <Form>
-                        <FormGroup>
-                          <Label>Full Name</Label>
-                          <Input type="text" placeholder="Shaina Agrawal" />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Email</Label>
-                          <Input type="email" placeholder="Jognsmith@cool.com" />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Password</Label>
-                          <Input type="password" placeholder="Password" />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Phone No</Label>
-                          <Input type="text" placeholder="123 456 1020" />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Message</Label>
-                          <Input type="textarea" />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label>Select Country</Label>
-                          <Input type="select">
-                            <option>USA</option>
-                            <option>India</option>
-                            <option>America</option>
-                          </Input>
-                        </FormGroup>
-                        <Button color="primary">Update Profile</Button>
-                      </Form>
+                    <Form>
+        <FormGroup>
+          <Label>Full Name</Label>
+          <Input type="name" name="username" value={formData.name} placeholder={data && data.name} onChange={handleInputChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Email</Label>
+          <Input type="email" name="email" value={formData.email} placeholder={data && data.email} onChange={handleInputChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Address</Label>
+          <Input type="text" name="address" value={formData.address} placeholder={data && data.address} onChange={handleInputChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Change Password</Label>
+          <Input type="text" name="password" value={formData.password} placeholder="******" onChange={handleInputChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Change Txn Password</Label>
+          <Input type="text" name="txnPassword" value={formData.txnPassword} placeholder="******" onChange={handleInputChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Phone No</Label>
+          <Input type="text" name="phone" value={formData.phone} placeholder={data && data.phone} onChange={handleInputChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label>Select Country</Label>
+          <Input type="select" name="country" value={formData.country} onChange={handleInputChange}>
+            <option value="USA">USA</option>
+            <option value="India">India</option>
+            <option value="America">America</option>
+          </Input>
+        </FormGroup>
+        <Button color="primary" onClick={() => acceptHandler(data && data.id)}>Update Profile</Button>
+      </Form>
                     </div>
                   </Col>
                 </Row>

@@ -50,7 +50,7 @@ const Sidebar = () => {
           <img src={user1} alt="John Deo" width={60} className="rounded-circle mb-2" />
           <UncontrolledDropdown>
             <DropdownToggle caret className="bg-transparent border-0">
-              John Deo
+              Super Admin
             </DropdownToggle>
             <DropdownMenu className='w-100 border'>
               <DropdownItem className="px-4 py-3">

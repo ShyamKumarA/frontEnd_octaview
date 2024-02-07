@@ -1,28 +1,39 @@
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import QRCode from 'react-qr-code';
+import { Col, Button } from 'reactstrap';
+import React, { useState } from 'react';
+
+
 
 const WeatherCard = () => {
-  return (
-    <Card className="bg-cyan">
-      <CardBody>
-        <Row>
-          <Col xs="12" className="text-white text-end">
-            <div>
-              <i className="bi bi-cloud-drizzle fs-1"></i>
-            </div>
+  const referralURL = 'https://admin.octtaview.com/auth/registerformik?id=6594eb0a914bacbd6de57687';
+  const [copied, setCopied] = useState(false);
 
-            <span className="">SUNNEY DAY</span>
-            <p className="op-5">April 14</p>
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(referralURL);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000); // Reset the copied state after 2 seconds
+  };
+  return ( 
+    // <Card className="bg-cyan">
+          <Col xs="12" className="text-black text-center">
+            <QRCode value={referralURL} />
+      <p className='text-bg-info mt-2'>
+        Referral URL: {referralURL}
+        <Button color='success'  type="button" onClick={copyToClipboard}>
+  {copied ? 'Copied!' : 'Copy'}
+</Button>
+          </p>
           </Col>
-          <Col xs="12" className="text-white">
-            <div className="display-4 mt-n5">
-              73<sup>°F</sup>
-            </div>
-            <p>AHMEDABAD, INDIA</p>
-          </Col>
-        </Row>
-      </CardBody>
-    </Card>
+    // </Card>
   );
 };
 
 export default WeatherCard;
+
+
+// StaticQRCode.js
+
+
+
